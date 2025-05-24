@@ -24,7 +24,7 @@ The goal is to improve classification performance and potentially gain insights 
     *   **Edges:** Interactions between particles, with features like `DeltaR`.
     *   **Global Features:** Event-level features like `invariant_mass_2j1p`, `invariant_mass_2j`, `leading_isophoton_pT`.
 *   **Training Pipeline:** Script for training the GNN model with options for optimizers, loss functions, and learning rate schedulers.
-*   **Evaluation:** Calculation of standard metrics (Accuracy, AUC, F1-score, Confusion Matrix).
+*   **Evaluation:** Calculation of standard metrics (Accuracy, AUC, F1-score).
 *   **Interpretability:**
     *   Functions to compute average node and edge feature importance using gradient-based saliency.
     *   Analysis of feature importance for different prediction outcomes (True Positives, True Negatives, False Positives, False Negatives).
@@ -41,40 +41,10 @@ The goal is to improve classification performance and potentially gain insights 
     cd lorentznet-event-classification
     ```
 
-2.  **Create a Python environment (recommended):**
-    ```bash
-    conda create -n lorentznet_env python=3.10 -y
-    conda activate lorentznet_env
-    ```
-    Or using `venv`:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate # On Windows: venv\Scripts\activate
-    ```
-
-3.  **Install dependencies:**
+2.  **Install dependencies:**
     Install PyTorch according to your CUDA version from [pytorch.org](https://pytorch.org/). Then, install PyTorch Geometric and other packages:
     ```bash
-    # Example for PyTorch with CUDA 11.8
-    # pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-
-    # Install PyTorch Geometric (ensure PyTorch is installed first)
-    # Check PyG website for commands specific to your PyTorch and CUDA version
-    # pip install pyg
-
-    # Install other requirements
     pip install -r requirements.txt
-    ```
-    A typical `requirements.txt` might include:
-    ```
-    numpy
-    pandas
-    scikit-learn
-    matplotlib
-    seaborn
-    tqdm
-    captum
-    # torch, pyg (usually installed separately as per above)
     ```
 
 ## Data Preparation
@@ -83,7 +53,7 @@ The goal is to improve classification performance and potentially gain insights 
 
 The initial data is expected to be in a tabular format (e.g., CSV or tab-separated TXT files), where each row represents an event, and columns represent various particle features and event-level information.
 Example columns might include:
-`eventno`, `jet1_Eta`, `jet1_Phi`, `jet1_pT`, `jet1_E`, `jet1_btag`, ..., `jet15_btag`, `isophoton1_Eta`, ..., `isophotoncount`, `event_label`.
+`eventno`, `jet1_Eta`, `jet1_Phi`, `jet1_pT`, `jet1_E`, `jet1_btag`, ..., `jet15_btag`, `isophoton1_Eta`, ..., `isophotoncount`.
 
 ### Conversion to GNN Format
 
@@ -98,8 +68,8 @@ The pipeline includes scripts to:
         "nodes": [[eta1, phi1, pt1, e1], [eta2, phi2, pt2, e2], ...], // Node features
         "edges": [deltaR1, deltaR2, ...],                             // Edge features (DeltaR)
         "edge_index": [[source_idx_array], [target_idx_array]],       // Connectivity
-        "node_labels": [0, 1, 1, ...],                                // 0 for photon, 1 for jet
-        "jet_btag_label": [null, 1.0, 0.0, ...],                      // B-tag for jets, null/NaN for photons
+        "node_labels": [0, 1, 1, ...],                                // 0 for isolated photon, 1 for jet
+        "jet_btag_label": [-1, 1.0, 0.0, ...],                      // B-tag for jets, -1 for isolated photons
         "inv_mass_2j1p": 150.5,
         "inv_mass_2j": 90.2,
         "isophoton_pT": 55.3,
@@ -114,11 +84,15 @@ The pipeline includes scripts to:
 
 ## LorentzNet Architecture
 
-The GNN architecture is defined in `./LGEB_block.py` or `./LGEBwithEdgeAttr_block.py`. It typically consists of:
-
-The specific implementation aims to incorporate principles of Lorentz-invariant features in the edge computations and uses 4-vector components (`E, px, py, pz`) or derived quantities (`Eta, Phi, pT, E`) as node features and Lorentz invariant quantities (`particle_type, b_tag_status, invariant_mass`) as scalar features.
+The GNN architecture is defined in `./LGEB_block.py` or `./LGEBwithEdgeAttr_block.py`. The specific implementation aims to incorporate principles of Lorentz-invariant features in the edge computations and uses 4-vector components (`E, px, py, pz`) and Lorentz invariant quantities (`particle_type, b_tag_status, invariant_mass`) as scalar features.
 
 
 ## License
 
-This project is licensed under the MIT License - see the `LICENSE` file for details (if you add one).
+This project is licensed under the MIT License - see the `LICENSE` file for details.
+
+## Contact
+
+*   Meet Jain - meetjain1818@gmail.com
+
+Project Link: [https://github.com/meetjain1818/LorentzNet_ParticleEvent_SignalBackground_Classifier.git](https://github.com/meetjain1818/LorentzNet_ParticleEvent_SignalBackground_Classifier.git)
