@@ -37,7 +37,7 @@ The goal is to improve classification performance and potentially gain insights 
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your_username/lorentznet-event-classification.git
+    git clone https://github.com/meetjain1818/LorentzNet_ParticleEvent_SignalBackground_Classifier.git
     cd lorentznet-event-classification
     ```
 
