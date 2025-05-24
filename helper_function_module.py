@@ -82,7 +82,7 @@ def set_seed(seed:int):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.benchmark = True
 
-def init_setup(batch_size:int=70, use_cuda:bool=True, random_seed:int=1234) -> torch.device:
+def init_setup(use_cuda:bool=True, random_seed:int=1234) -> torch.device:
     """
     Initialize the computational environment by setting up CUDA, batch size, and seed for reproducibility.
 
@@ -91,7 +91,6 @@ def init_setup(batch_size:int=70, use_cuda:bool=True, random_seed:int=1234) -> t
     - use_cuda (bool): Flag to enable or disable CUDA usage.
     - random_seed (int): Seed for reproducibility.
     """
-    BATCH_SIZE = batch_size
     device = torch.device('cuda' if torch.cuda.is_available() and use_cuda else 'cpu')
     
     print(f"Using device: {device}")
